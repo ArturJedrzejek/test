@@ -2,9 +2,9 @@
   gather_facts: true
   tasks:
     - name: Pobierz hostname hosta
-       debug:
+      debug:
         msg: "Hostname: {{ ansible_hostname }}"
-        
+
     - name: Pokaż system operacyjny
       debug:
         msg:
