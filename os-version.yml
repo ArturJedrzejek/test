@@ -1,5 +1,7 @@
 - hosts: all
   gather_facts: false
+  become: true
+
   tasks:
     - name: Pobierz tylko hostname i system operacyjny
       setup:
@@ -8,14 +10,18 @@
           - "ansible_distribution"
           - "ansible_distribution_version"
           - "ansible_distribution_release"
-          
-    - name: Pobierz hostname hosta
-      debug:
-        msg: "Hostname: {{ ansible_hostname }}"
 
-    - name: Pokaż system operacyjny
+    - name: Pobierz hostname i system operacyjny
       debug:
-        msg:
-          - "OS: {{ ansible_distribution }}"
-          - "Version: {{ ansible_distribution_version }}"
-          - "Release: {{ ansible_distribution_release }}"
+        msg: |
+          Hostname: {{ ansible_hostname }}
+          OS: {{ ansible_distribution }} {{ ansible_distribution_version }} ({{ ansible_distribution_release }})
+
+    - name: Sprawdź wersję PostgreSQL
+      command: psql --version
+      register: psql_version
+      ignore_errors: yes  # w razie gdy PostgreSQL nie jest zainstalowany
+
+    - name: Wyświetl wersję PostgreSQL
+      debug:
+        msg: "PostgreSQL: {{ psql_version.stdout if psql_version.stdout else 'nie zainstalowany' }}"
