@@ -1,0 +1,9 @@
+- hosts: all
+  gather_facts: true
+  tasks:
+    - name: Pokaż system operacyjny
+      debug:
+        msg:
+          - "OS: {{ ansible_distribution }}"
+          - "Version: {{ ansible_distribution_version }}"
+          - "Release: {{ ansible_distribution_release }}"
